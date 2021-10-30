@@ -1,7 +1,6 @@
 use serde_derive::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::io::Write;
-use std::time::{SystemTime, UNIX_EPOCH};
 use super::util::get_history_file;
 use std::fs::File;
 
@@ -29,7 +28,6 @@ impl History {
     }
 
     pub fn update(&mut self, id: &str) {
-        let epoch = SystemTime::now().duration_since(UNIX_EPOCH).expect("Time went backwards");
-        self.last_used.insert(id.to_string(), epoch.as_secs());
+        *self.last_used.entry(id.into()).or_default() += 1
     }
 }
